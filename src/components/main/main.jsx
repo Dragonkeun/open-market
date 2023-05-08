@@ -1,8 +1,15 @@
 import styles from "./main.module.css";
 import { EventBanner } from "../eventBanner/eventBanner";
 import { Product } from "../products/product";
+import axios from "axios";
+import { useEffect } from "react";
 
-export const Main = () => {
+export const Main = ({ products, setProducts, convertPrice }) => {
+  useEffect(() => {
+    axios.get("/data/products.json").then((data) => {
+      setProducts(data.data.products);
+    });
+  }, [setProducts]);
   return (
     <>
       <EventBanner />
@@ -12,7 +19,9 @@ export const Main = () => {
         <p>높은 가격</p>
       </div>
       <main className={styles.flex_wrap}>
-        <Product />
+        {products.map((product) => {
+          return <Product key={`key-${product.id}`} product={product} convertPrice={convertPrice}/>;
+        })}
       </main>
     </>
   );
