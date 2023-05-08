@@ -25,18 +25,35 @@ export const Detail = ({ convertPrice, cart, setCart }) => {
       );
     });
   }, []);
-  const handleCart = () => {
+  const setQuantity = (id, quantity) => {
+    //장바구니에 물건을 넣는데 중복된 물건이 들어왔을 땐 setQuantity 함수를 이용(같은 상품 1개를 장바구니에 넣고, 2개를 장바구니에 넣으면 따로따로 들어가는 것 방지)
+    const found = cart.filter((el) => el.id === id)[0];
+    const idx = cart.indexOf(found);
     const cartItem = {
       id: product.id,
       image: product.image,
       name: product.name,
       price: product.price,
       provider: product.provider,
-      quantity: count
-    }
-    setCart([...cart, cartItem]) //기존의 cart 내용은 유지하면서 cartItem을 추가
-  }
-  console.log(cart);
+      quantity: quantity, //quantity로 바뀜
+    };
+    setCart([...cart.slice(0, idx), cartItem, ...cart.slice(idx + 1)]);
+  };
+  const handleCart = () => {
+    //장바구니에 물건을 넣는데 중복된 물건이 아닐 때만
+    const cartItem = {
+      id: product.id,
+      image: product.image,
+      name: product.name,
+      price: product.price,
+      provider: product.provider,
+      quantity: count,
+    };
+    const found = cart.find((el) => el.id === cartItem.id);
+    if (found) setQuantity(cartItem.id, found.quantity + count);
+    else setCart([...cart, cartItem]); //기존의 cart 내용은 유지하면서 cartItem을 추가
+  };
+  console.log(cart)
   return (
     product && (
       <>
@@ -102,7 +119,9 @@ export const Detail = ({ convertPrice, cart, setCart }) => {
 
             <div className={styles.btn}>
               <button className={styles.btn_buy}>바로 구매</button>
-              <button className={styles.btn_cart} onClick={()=>handleCart()}>장바구니</button>
+              <button className={styles.btn_cart} onClick={() => handleCart()}>
+                장바구니
+              </button>
             </div>
           </section>
         </main>
