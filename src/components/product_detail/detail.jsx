@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { getProducts } from "../../service/fetcher";
 
-export const Detail = ({ convertPrice }) => {
+export const Detail = ({ convertPrice, cart, setCart }) => {
   const { id } = useParams();
   const [product, setProduct] = useState({}); //id값이 일치하는 상품 출력 예정
   const [count, setCount] = useState(1); //상품 수량
@@ -25,6 +25,18 @@ export const Detail = ({ convertPrice }) => {
       );
     });
   }, []);
+  const handleCart = () => {
+    const cartItem = {
+      id: product.id,
+      image: product.image,
+      name: product.name,
+      price: product.price,
+      provider: product.provider,
+      quantity: count
+    }
+    setCart([...cart, cartItem]) //기존의 cart 내용은 유지하면서 cartItem을 추가
+  }
+  console.log(cart);
   return (
     product && (
       <>
@@ -90,7 +102,7 @@ export const Detail = ({ convertPrice }) => {
 
             <div className={styles.btn}>
               <button className={styles.btn_buy}>바로 구매</button>
-              <button className={styles.btn_cart}>장바구니</button>
+              <button className={styles.btn_cart} onClick={()=>handleCart()}>장바구니</button>
             </div>
           </section>
         </main>
