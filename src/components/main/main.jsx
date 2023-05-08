@@ -3,10 +3,11 @@ import { EventBanner } from "../eventBanner/eventBanner";
 import { Product } from "../products/product";
 import axios from "axios";
 import { useEffect } from "react";
+import { getProducts } from "../../service/fetcher";
 
 export const Main = ({ products, setProducts, convertPrice }) => {
   useEffect(() => {
-    axios.get("/data/products.json").then((data) => {
+    getProducts().then((data) => {
       setProducts(data.data.products);
     });
   }, [setProducts]);

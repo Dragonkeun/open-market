@@ -4,7 +4,7 @@ import styles from "./product.module.css";
 export const Product = ({product, convertPrice}) => {
   return (
     <div className={styles.product}>
-      <Link to="#">
+      <Link to={`/product/${product.id}`}>
         <div className={styles.product_image}>
           <img src={product.image} alt="product" />
         </div>

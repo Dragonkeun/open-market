@@ -9,14 +9,14 @@ import { useState } from "react";
 function App() {
   const [products, setProducts] = useState([])
   const convertPrice = (price) => {
-    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g,".");
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g,",");
   }
   return (
     <BrowserRouter>
       <TopNavigationBar />
       <Routes>
         <Route path="/" element={<Home products={products} setProducts={setProducts} convertPrice={convertPrice} />} />
-        <Route path="/product/:id" element={<Product />} />
+        <Route path="/product/:id" element={<Product convertPrice={convertPrice} />} />
         <Route path="/cart" element={<Basket />} />
       </Routes>
     </BrowserRouter>
