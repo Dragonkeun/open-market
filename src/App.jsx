@@ -18,7 +18,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home products={products} setProducts={setProducts} convertPrice={convertPrice} />} />
         <Route path="/product/:id" element={<Product convertPrice={convertPrice} cart={cart} setCart={setCart} />}  />
-        <Route path="/cart" element={<Basket />} />
+        <Route path="/cart" element={<Basket convertPrice={convertPrice} cart={cart} setCart={setCart}/>} />
       </Routes>
     </BrowserRouter>
   );
