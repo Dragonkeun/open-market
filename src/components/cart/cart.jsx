@@ -2,8 +2,32 @@ import { CartHeader } from "./CartHeader";
 import { CartList } from "./CartList";
 import styles from "./cart.module.css";
 import { TotalCart } from "./totalCart";
+import { useState } from "react";
 
-export const Cart = ({ convertPrice, cart, setCart }) => {
+export const Cart = ({
+  convertPrice,
+  cart,
+  setCart,
+  checkLists,
+  setCheckLists,
+}) => {
+  const handleCheckList = (checked, id) => {
+    if (checked) {
+      setCheckLists([...checkLists, id]);
+    } else {
+      setCheckLists(checkLists.filter((check) => check !== id));
+    }
+  };
+  const handleAllCheck = (checked) => {
+    if (checked) {
+      const checkItems = [];
+      cart.map((cart) => checkItems.push(cart.id));
+      setCheckLists(checkItems);
+    } else {
+      setCheckLists([]);
+    }
+  };
+  const isAllChecked = cart.length === checkLists.length && checkLists.length !== 0;
   const handleQuantity = (type, id, quantity) => {
     const found = cart.filter((el) => el.id === id)[0];
     const idx = cart.indexOf(found);
@@ -18,19 +42,19 @@ export const Cart = ({ convertPrice, cart, setCart }) => {
     if (type === "plus") {
       setCart([...cart.slice(0, idx), cartItem, ...cart.slice(idx + 1)]);
     } else {
-      if(quantity === 0) return
+      if (quantity === 0) return;
       setCart([...cart.slice(0, idx), cartItem, ...cart.slice(idx + 1)]);
     }
   };
   const handleRemove = (id) => {
-    setCart(cart.filter((el) => el.id !== id))
-  }
+    setCart(cart.filter((el) => el.id !== id));
+  };
   return (
     <>
       <header className={styles.header}>
         <h1>장바구니</h1>
       </header>
-      <CartHeader />
+      <CartHeader handleAllCheck={handleAllCheck} isAllChecked={isAllChecked} />
       {cart.length === 0 ? (
         <div className={styles.not}>
           <h2>장바구니에 담긴 상품이 없습니다.</h2>
@@ -46,6 +70,8 @@ export const Cart = ({ convertPrice, cart, setCart }) => {
               setCart={setCart}
               handleQuantity={handleQuantity}
               handleRemove={handleRemove}
+              handleCheckList={handleCheckList}
+              checkLists={checkLists}
             />
           );
         })
@@ -56,6 +82,5 @@ export const Cart = ({ convertPrice, cart, setCart }) => {
   );
 };
 
-// 장바구니 수량 증감, X 버튼 클릭 시 삭제
-// 체크 버튼 클릭된 것만 가격 체크, 맨 위 체크 버튼 클릭 시 모든 상품 선택
+// 장바구니 총가격계산
 // 메인페이지 최신순 낮은가격 높은가격

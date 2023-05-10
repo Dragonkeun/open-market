@@ -7,6 +7,7 @@ import Basket from "./pages/basket";
 import { useState } from "react";
 
 function App() {
+  const [checkLists, setCheckLists] = useState([]);
   const [products, setProducts] = useState([])
   const [cart, setCart] = useState([])
   const convertPrice = (price) => {
@@ -18,7 +19,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home products={products} setProducts={setProducts} convertPrice={convertPrice} />} />
         <Route path="/product/:id" element={<Product convertPrice={convertPrice} cart={cart} setCart={setCart} />}  />
-        <Route path="/cart" element={<Basket convertPrice={convertPrice} cart={cart} setCart={setCart}/>} />
+        <Route path="/cart" element={<Basket convertPrice={convertPrice} cart={cart} setCart={setCart} checkLists={checkLists} setCheckLists={setCheckLists} />} />
       </Routes>
     </BrowserRouter>
   );
