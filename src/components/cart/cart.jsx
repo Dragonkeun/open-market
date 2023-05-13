@@ -11,6 +11,7 @@ export const Cart = ({
   checkLists,
   setCheckLists,
 }) => {
+  const [total, setTotal] = useState(0);
   const handleCheckList = (checked, id) => {
     if (checked) {
       setCheckLists([...checkLists, id]);
@@ -27,7 +28,11 @@ export const Cart = ({
       setCheckLists([]);
     }
   };
-  const isAllChecked = cart.length === checkLists.length && checkLists.length !== 0;
+  const isAllChecked =
+    cart.length === checkLists.length && checkLists.length !== 0;
+  const found = checkLists.map((checkList) => {
+    cart.filter((el) => el.id === checkList);
+  });
   const handleQuantity = (type, id, quantity) => {
     const found = cart.filter((el) => el.id === id)[0];
     const idx = cart.indexOf(found);
@@ -48,6 +53,7 @@ export const Cart = ({
   };
   const handleRemove = (id) => {
     setCart(cart.filter((el) => el.id !== id));
+    setCheckLists(checkLists.filter((check) => check !== id));
   };
   return (
     <>
@@ -77,7 +83,7 @@ export const Cart = ({
         })
       )}
 
-      {cart.length === 0 ? "" : <TotalCart />}
+      {cart.length === 0 ? "" : <TotalCart cart={cart} total={total} setTotal={setTotal} found={found} />}
     </>
   );
 };

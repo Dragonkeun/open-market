@@ -1,10 +1,25 @@
 import styles from "./cart.module.css";
-export const TotalCart = () => {
+import { useEffect } from "react";
+export const TotalCart = ({ cart, total, setTotal, found }) => {
+  useEffect(() => {
+    if (found && found.length > 0) {
+      const sum = found.map((item) => item[0].price * item[0].quantity);
+      const reducer = (acc, cur) => acc + cur;
+      if (sum.length === 0) {
+        setTotal(0);
+        return;
+      }
+      const itemTotal = sum.reduce(reducer);
+      setTotal(itemTotal);
+    } else {
+      setTotal(0);
+    }
+  }, [cart, total, found, setTotal]);
   return (
     <div className={styles.total}>
       <div className={styles.total_price}>
         <p className={styles.cart_product_total_price}>총 상품금액</p>
-        <p className={styles.cart_product_price}>0</p>
+        <p className={styles.cart_product_price}>{total}</p>
       </div>
       <div className={styles.pay_minus}>
         <img src="/images/icon-minus-line.svg" alt="minus" />
@@ -23,7 +38,7 @@ export const TotalCart = () => {
 
       <div className={styles.payment}>
         <p className={styles.cart_prouct_payment}>결제 예정 금액</p>
-        <p className={styles.cart_prouct_payment_price}>0</p>
+        <p className={styles.cart_prouct_payment_price}>{total}</p>
       </div>
     </div>
   );
